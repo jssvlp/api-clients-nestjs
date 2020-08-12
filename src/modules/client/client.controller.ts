@@ -6,30 +6,39 @@ import {
   Body,
   Delete,
   Put,
+  UseGuards,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { ClientService } from './client.service';
 import { Client } from './client.entity';
+import { AuthGuard } from '@nestjs/passport';
+import { ReadClientDto } from './dtos/read-client.dto';
+import { CreateClientDto } from './dtos/create-client.dto';
+import { UpdateClientDto } from './dtos/update-client.dto';
 
+@UseGuards(AuthGuard())
 @Controller('clients')
 export class ClientController {
   constructor(private readonly __clientService: ClientService) {}
 
   @Get(':id')
-  async getClient(@Param() id: number): Promise<Client> {
+  async getClient(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<ReadClientDto> {
     const client = this.__clientService.get(id);
 
     return client;
   }
 
   @Get()
-  async getClients(): Promise<Client[]> {
-    const users = this.__clientService.getAll();
+  async getClients(): Promise<ReadClientDto[]> {
+    const clients = this.__clientService.getAll();
 
-    return users;
+    return clients;
   }
 
   @Post()
-  async create(@Body() client: Client): Promise<Client> {
+  async create(@Body() client: Client): Promise<ReadClientDto> {
     const createdClient = this.__clientService.create(client);
 
     return createdClient;
@@ -37,10 +46,13 @@ export class ClientController {
 
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   @Put(':id')
-  async update(@Param() id: number, @Body() client: Client) {
-    const updateUser = await this.__clientService.update(id, client);
+  async update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() client: UpdateClientDto,
+  ) {
+    const updateClient = await this.__clientService.update(id, client);
 
-    return true;
+    return updateClient;
   }
 
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -48,6 +60,6 @@ export class ClientController {
   async delete(@Param('id') id: number) {
     await this.__clientService.delete(id);
 
-    return true;
+    return { statusCode: 200, message: 'resource updated correctly' };
   }
 }

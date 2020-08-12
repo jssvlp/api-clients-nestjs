@@ -6,10 +6,10 @@ import {
   Body,
   Put,
   Delete,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { ProfileService } from './profile.service';
-import { ProfileDto } from './dto/profile.dto';
-import { ProfilePostDto } from './dto/profile.post.dto';
+import { ReadProfileDto, CreateProfileDto } from './dtos';
 import Profile from './profile.entity';
 
 @Controller('profiles')
@@ -17,21 +17,25 @@ export class ProfileController {
   constructor(private readonly __profileService: ProfileService) {}
 
   @Get(':id')
-  async getProfile(@Param() id: number): Promise<ProfileDto> {
-    const profile = this.__profileService.get(id);
+  async getProfile(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<ReadProfileDto> {
+    const profile: ReadProfileDto = await this.__profileService.get(id);
 
     return profile;
   }
 
   @Get()
-  async getProfiles(): Promise<ProfileDto[]> {
+  getProfiles(): Promise<ReadProfileDto[]> {
     const profiles = this.__profileService.getAll();
 
     return profiles;
   }
 
   @Post()
-  async create(@Body() profile: Profile): Promise<Profile> {
+  async create(
+    @Body() profile: Partial<CreateProfileDto>,
+  ): Promise<ReadProfileDto> {
     const createdProfile = this.__profileService.create(profile);
 
     return createdProfile;
@@ -39,10 +43,13 @@ export class ProfileController {
 
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   @Put(':id')
-  async update(@Param() id: number, @Body() profile: Profile) {
+  async update(
+    @Param() id: number,
+    @Body() profile: Profile,
+  ): Promise<ReadProfileDto> {
     const updatedProfile = await this.__profileService.update(id, profile);
 
-    return true;
+    return updatedProfile;
   }
 
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -50,6 +57,6 @@ export class ProfileController {
   async delete(@Param('id') id: number) {
     await this.__profileService.delete(id);
 
-    return true;
+    return { statusCode: 200, message: 'resource deleted correctly' };
   }
 }

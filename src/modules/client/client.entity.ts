@@ -62,6 +62,7 @@ export class Client extends BaseEntity {
   @OneToMany(
     type => Address,
     address => address.client,
+    { eager: true },
   )
   addresses: Address[];
 

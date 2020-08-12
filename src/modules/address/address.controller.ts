@@ -6,11 +6,15 @@ import {
   Put,
   Param,
   Delete,
+  NotFoundException,
 } from '@nestjs/common';
 import { AddressService } from './address.service';
 import { Address } from './address.entity';
+import { getConnection } from 'typeorm';
+import { Client } from '../client/client.entity';
+import { CreateAddressDto } from './dtos';
 
-@Controller('address')
+@Controller('addresses')
 export class AddressController {
   constructor(private readonly __addressService: AddressService) {}
 
@@ -29,8 +33,17 @@ export class AddressController {
   }
 
   @Post()
-  async create(@Body() profile: Address): Promise<Address> {
-    const createdAddress = this.__addressService.create(profile);
+  async create(@Body() address: CreateAddressDto): Promise<Address> {
+    const clientRepo = await getConnection().getRepository(Client);
+
+    const client: Client = await clientRepo.findOne(address.clientId);
+
+    if (!client) {
+      throw new NotFoundException('client not found');
+    }
+    address.client = client;
+
+    const createdAddress = this.__addressService.create(address);
 
     return createdAddress;
   }
@@ -40,7 +53,7 @@ export class AddressController {
   async update(@Param() id: number, @Body() profile: Address) {
     const updatedAddress = await this.__addressService.update(id, profile);
 
-    return true;
+    return { statusCode: 200, message: 'resource updated correctly' };
   }
 
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -48,6 +61,6 @@ export class AddressController {
   async delete(@Param('id') id: number) {
     await this.__addressService.delete(id);
 
-    return true;
+    return { statusCode: 200, message: 'resource deleted correctly' };
   }
 }

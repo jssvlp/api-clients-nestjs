@@ -6,6 +6,7 @@ import {
 import { AddressRepository } from './address.repository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Address } from './address.entity';
+import { CreateAddressDto } from './dtos';
 
 @Injectable()
 export class AddressService {
@@ -38,7 +39,7 @@ export class AddressService {
     return addresses;
   }
 
-  async create(address: Address): Promise<Address> {
+  async create(address: CreateAddressDto): Promise<Address> {
     const savedAddress = await this.__addressRepository.save(address);
 
     return savedAddress;

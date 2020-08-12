@@ -5,8 +5,6 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
-  OneToOne,
-  JoinColumn,
 } from 'typeorm';
 
 @Entity('profiles')
@@ -20,11 +18,8 @@ export default class Profile extends BaseEntity {
   @Column({ type: 'varchar', unique: true, length: 25 })
   username: string;
 
-  @Column({})
+  @Column({ type: 'varchar', length: 100 })
   password: string;
-
-  @Column({})
-  picture: string;
 
   @Column({ type: 'varchar', nullable: false, default: 'active', length: 8 })
   status: string;
@@ -34,4 +29,6 @@ export default class Profile extends BaseEntity {
 
   @UpdateDateColumn({ type: 'timestamp', name: 'updated_at' })
   updateAt: Date;
+
+  clientId: number;
 }

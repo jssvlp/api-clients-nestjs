@@ -2,11 +2,11 @@ import { Repository, EntityRepository } from 'typeorm';
 
 import Profile from '../profile/profile.entity';
 import { SignUpDto } from './dto';
-import { getSalt, hash } from 'bcryptjs';
+import { genSalt, hash } from 'bcryptjs';
 
 @EntityRepository(Profile)
 export class AuthRepository extends Repository<Profile> {
-  async singup(signUpDto: SignUpDto) {
+  async singup(signUpDto: SignUpDto): Promise<void> {
     const { email, username, password } = signUpDto;
 
     const userProfile = new Profile();
@@ -14,7 +14,7 @@ export class AuthRepository extends Repository<Profile> {
     userProfile.username = username;
     userProfile.email = email;
 
-    const salt = await getSalt('10');
+    const salt = await genSalt(8);
 
     userProfile.password = await hash(password, salt);
 

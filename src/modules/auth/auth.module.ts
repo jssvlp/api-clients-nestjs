@@ -28,7 +28,7 @@ import { Configuration } from '../../config/config.keys';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, ConfigService],
+  providers: [AuthService, ConfigService, JwtStrategie],
   exports: [JwtStrategie, PassportModule],
 })
 export class AuthModule {}

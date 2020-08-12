@@ -1,15 +1,13 @@
 import {
   Injectable,
   ConflictException,
-  NotFoundException,
-  BadRequestException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { AuthRepository } from './auth.respository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { JwtService } from '@nestjs/jwt';
 import { SignUpDto, SignInDto } from './dto';
-import { sign } from 'crypto';
+
 import Profile from '../profile/profile.entity';
 import { compare } from 'bcryptjs';
 import { IJwtPayload } from './jwt-payload.interface';
@@ -25,7 +23,7 @@ export class AuthService {
   async signUp(signUpDto: SignUpDto): Promise<void> {
     const { username, email } = signUpDto;
 
-    const userProfileExists = this.__authRepository.findOne({
+    const userProfileExists = await this.__authRepository.findOne({
       where: [{ username }, { email }],
     });
 
@@ -39,7 +37,7 @@ export class AuthService {
   async signIn(signInDto: SignInDto): Promise<{ token: string }> {
     const { username, password } = signInDto;
 
-    const userProfile: Profile = this.__authRepository.find({
+    const userProfile: Profile = await this.__authRepository.findOne({
       where: { username },
     });
 
@@ -60,5 +58,6 @@ export class AuthService {
     };
 
     const token = await this.__jwtService.sign(payload);
+    return { token };
   }
 }
