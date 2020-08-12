@@ -4,6 +4,7 @@ import {
   PrimaryGeneratedColumn,
   Column,
   ManyToOne,
+  JoinColumn,
 } from 'typeorm';
 import { Client } from '../client/client.entity';
 
@@ -43,7 +44,11 @@ export class Address extends BaseEntity {
   @ManyToOne(
     type => Client,
     client => client.addresses,
+    {
+      onDelete: 'CASCADE',
+    },
   )
+  @JoinColumn({ name: 'client_id' })
   client: Client;
 
   @Column({ type: 'timestamp', name: 'created_at' })

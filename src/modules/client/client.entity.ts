@@ -42,11 +42,21 @@ export class Client extends BaseEntity {
   @Column({ type: 'varchar' })
   gender: string;
 
-  @Column({ type: 'varchar', length: 100, nullable: false })
+  @Column({
+    type: 'varchar',
+    length: 100,
+    name: 'birth_place',
+    nullable: false,
+  })
   birthPlace: string;
 
-  @OneToOne(type => Profile, { cascade: false, nullable: true, eager: true })
-  @JoinColumn()
+  @OneToOne(type => Profile, {
+    cascade: false,
+    nullable: true,
+    eager: true,
+    onDelete: 'SET NULL',
+  })
+  @JoinColumn({ name: 'profile_id' })
   profile: Profile;
 
   @OneToMany(

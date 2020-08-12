@@ -18,7 +18,7 @@ export class ClientService {
 
   async get(id: number): Promise<Client> {
     if (!id) {
-      throw new BadRequestException('id m t be sent');
+      throw new BadRequestException('id must be sent');
     }
 
     const client: Client = await this.__clientRepository.findOne(id, {

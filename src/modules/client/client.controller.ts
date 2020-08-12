@@ -5,9 +5,7 @@ import {
   Post,
   Body,
   Delete,
-  Patch,
   Put,
-  ParseIntPipe,
 } from '@nestjs/common';
 import { ClientService } from './client.service';
 import { Client } from './client.entity';
