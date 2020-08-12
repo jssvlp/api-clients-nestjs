@@ -1,6 +1,7 @@
 import * as fs from 'fs';
 import { parse } from 'dotenv';
 import { fileURLToPath } from 'url';
+
 export class ConfigService {
   private readonly envConfig: { [key: string]: string };
 
