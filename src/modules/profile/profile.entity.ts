@@ -14,8 +14,11 @@ export default class Profile extends BaseEntity {
   @PrimaryGeneratedColumn('increment')
   id: number;
 
-  @Column({})
+  @Column({ type: 'varchar', unique: true, length: 100 })
   email: string;
+
+  @Column({ type: 'varchar', unique: true, length: 25 })
+  username: string;
 
   @Column({})
   password: string;

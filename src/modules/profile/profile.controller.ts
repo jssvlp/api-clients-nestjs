@@ -10,6 +10,7 @@ import {
 import { ProfileService } from './profile.service';
 import { ProfileDto } from './dto/profile.dto';
 import { ProfilePostDto } from './dto/profile.post.dto';
+import Profile from './profile.entity';
 
 @Controller('profiles')
 export class ProfileController {
@@ -30,7 +31,7 @@ export class ProfileController {
   }
 
   @Post()
-  async create(@Body() profile: ProfilePostDto): Promise<ProfileDto> {
+  async create(@Body() profile: Profile): Promise<Profile> {
     const createdProfile = this.__profileService.create(profile);
 
     return createdProfile;
@@ -38,7 +39,7 @@ export class ProfileController {
 
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   @Put(':id')
-  async update(@Param() id: number, @Body() profile: ProfilePostDto) {
+  async update(@Param() id: number, @Body() profile: Profile) {
     const updatedProfile = await this.__profileService.update(id, profile);
 
     return true;

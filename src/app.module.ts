@@ -5,12 +5,12 @@ import { ConfigModule } from './config/config.module';
 import { ConfigService } from './config/config.service';
 import { Configuration } from './config/config.keys';
 import { DatabaseModule } from './database/database.module';
-import { UserModule } from './modules/user/user.module';
 import { ClientModule } from './modules/client/client.module';
 import { ProfileModule } from './modules/profile/profile.module';
 import { AddressModule } from './modules/address/address.module';
 import { ClientController } from './modules/client/client.controller';
 import { ClientService } from './modules/client/client.service';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   controllers: [AppController, ClientController],
@@ -18,10 +18,10 @@ import { ClientService } from './modules/client/client.service';
   imports: [
     ConfigModule,
     DatabaseModule,
-    UserModule,
     ClientModule,
     ProfileModule,
     AddressModule,
+    AuthModule,
   ],
 })
 export class AppModule {

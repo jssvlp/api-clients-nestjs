@@ -10,7 +10,4 @@ export class ProfileDto {
 
   @IsNotEmpty()
   picture: string;
-
-  @IsNotEmpty()
-  clientId: number;
 }
